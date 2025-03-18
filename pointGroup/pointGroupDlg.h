@@ -9,30 +9,32 @@
 #define RANGE 50.f
 #define MEMBERCNT 3
 #define POINTSIZE 5.f
+#define PENCOUNT 200
 
 // CpointGroupDlg 대화 상자
 class CpointGroupDlg : public CDialogEx
 {
-// 생성입니다.
+	// 생성입니다.
 public:
-	CpointGroupDlg(CWnd* pParent = nullptr);	// 표준 생성자입니다.
+	CpointGroupDlg( CWnd* pParent = nullptr );	// 표준 생성자입니다.
 
-// 대화 상자 데이터입니다.
+	// 대화 상자 데이터입니다.
 #ifdef AFX_DESIGN_TIME
 	enum { IDD = IDD_POINTGROUP_DIALOG };
 #endif
 
-	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);	// DDX/DDV 지원입니다.
+protected:
+	virtual void DoDataExchange( CDataExchange* pDX );	// DDX/DDV 지원입니다.
 
 
-// 구현입니다.
+	// 구현입니다.
 protected:
 	HICON m_hIcon;
 
 	// point 저장 vector, 같은 point를 가진다
 	vector<Point*> m_vp;
 	vector<Point*> m_vp2;
+	CPen m_pen[PENCOUNT];
 
 	vector<Point*>* m_drawVP;	// 그릴때 사용
 
@@ -47,7 +49,7 @@ protected:
 
 	// 생성된 메시지 맵 함수
 	virtual BOOL OnInitDialog();
-	afx_msg void OnSysCommand(UINT nID, LPARAM lParam);
+	afx_msg void OnSysCommand( UINT nID, LPARAM lParam );
 	afx_msg void OnPaint();
 	afx_msg HCURSOR OnQueryDragIcon();
 	DECLARE_MESSAGE_MAP()

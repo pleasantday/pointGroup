@@ -6,7 +6,7 @@ CGrouping::CGrouping( vector<Point*>& _vp, double _range, int _memCnt )
 	m_vp = &_vp;
 	m_range = _range;
 	m_memCnt = _memCnt;
-	m_sectorCnt = 0;
+	m_sectorCnt = 1;
 	m_sectorStartNum = m_sectorCnt;
 }
 
@@ -34,6 +34,7 @@ void CGrouping::Clustering( Point* pp )
 	if( pp->member.size() >= m_memCnt )
 	{
 		pp->type = "CORE";
+		pp->attr = PointAttribute::CORE;
 
 		if( pp->sector < m_sectorStartNum )	// 속한 sector가 없는 경우
 			pp->sector = m_sectorCnt++;
@@ -41,8 +42,12 @@ void CGrouping::Clustering( Point* pp )
 		for( int i = 0; i < pp->member.size(); ++i )
 		{
 			pp->member[i]->sector = pp->sector;
-			if( pp->member[i]->type.compare( "CORE" ) != 0 )
+			//if( pp->member[i]->type.compare( "CORE" ) != 0 )
+			if( pp->member[i]->attr != PointAttribute::NONE )
+			{
 				pp->member[i]->type = "BORDER";
+				pp->attr = PointAttribute::BORDER;
+			}
 		}
 
 		for( int i = 0; i < pp->member.size(); ++i )
@@ -52,9 +57,15 @@ void CGrouping::Clustering( Point* pp )
 	else	// member수를 채우지 못함 == CORE 아님
 	{
 		if( pp->sector >= m_sectorStartNum )	// 소속 있음
+		{
 			pp->type = "BORDER";
+			pp->attr = PointAttribute::BORDER;
+		}
 		else
+		{
 			pp->type = "NOISE";
+			pp->attr = PointAttribute::NOISE;
+		}
 	}
 }
 

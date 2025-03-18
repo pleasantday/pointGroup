@@ -20,29 +20,29 @@ class CAboutDlg : public CDialogEx
 public:
 	CAboutDlg();
 
-// 대화 상자 데이터입니다.
+	// 대화 상자 데이터입니다.
 #ifdef AFX_DESIGN_TIME
 	enum { IDD = IDD_ABOUTBOX };
 #endif
 
-	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV 지원입니다.
+protected:
+	virtual void DoDataExchange( CDataExchange* pDX );    // DDX/DDV 지원입니다.
 
-// 구현입니다.
+	// 구현입니다.
 protected:
 	DECLARE_MESSAGE_MAP()
 };
 
-CAboutDlg::CAboutDlg() : CDialogEx(IDD_ABOUTBOX)
+CAboutDlg::CAboutDlg() : CDialogEx( IDD_ABOUTBOX )
 {
 }
 
-void CAboutDlg::DoDataExchange(CDataExchange* pDX)
+void CAboutDlg::DoDataExchange( CDataExchange* pDX )
 {
-	CDialogEx::DoDataExchange(pDX);
+	CDialogEx::DoDataExchange( pDX );
 }
 
-BEGIN_MESSAGE_MAP(CAboutDlg, CDialogEx)
+BEGIN_MESSAGE_MAP( CAboutDlg, CDialogEx )
 END_MESSAGE_MAP()
 
 
@@ -50,22 +50,22 @@ END_MESSAGE_MAP()
 
 
 
-CpointGroupDlg::CpointGroupDlg(CWnd* pParent /*=nullptr*/)
-	: CDialogEx(IDD_POINTGROUP_DIALOG, pParent)
+CpointGroupDlg::CpointGroupDlg( CWnd* pParent /*=nullptr*/ )
+	: CDialogEx( IDD_POINTGROUP_DIALOG, pParent )
 {
-	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
+	m_hIcon = AfxGetApp()->LoadIcon( IDR_MAINFRAME );
 
 	m_ptInfo = false;
 	m_gpInfo = false;
 	m_drawVP = &m_vp2;
 }
 
-void CpointGroupDlg::DoDataExchange(CDataExchange* pDX)
+void CpointGroupDlg::DoDataExchange( CDataExchange* pDX )
 {
-	CDialogEx::DoDataExchange(pDX);
+	CDialogEx::DoDataExchange( pDX );
 }
 
-BEGIN_MESSAGE_MAP(CpointGroupDlg, CDialogEx)
+BEGIN_MESSAGE_MAP( CpointGroupDlg, CDialogEx )
 	ON_WM_SYSCOMMAND()
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
@@ -85,29 +85,30 @@ BOOL CpointGroupDlg::OnInitDialog()
 	// 시스템 메뉴에 "정보..." 메뉴 항목을 추가합니다.
 
 	// IDM_ABOUTBOX는 시스템 명령 범위에 있어야 합니다.
-	ASSERT((IDM_ABOUTBOX & 0xFFF0) == IDM_ABOUTBOX);
-	ASSERT(IDM_ABOUTBOX < 0xF000);
+	ASSERT( (IDM_ABOUTBOX & 0xFFF0) == IDM_ABOUTBOX );
+	ASSERT( IDM_ABOUTBOX < 0xF000 );
 
-	CMenu* pSysMenu = GetSystemMenu(FALSE);
-	if (pSysMenu != nullptr)
+	CMenu* pSysMenu = GetSystemMenu( FALSE );
+	if( pSysMenu != nullptr )
 	{
 		BOOL bNameValid;
 		CString strAboutMenu;
-		bNameValid = strAboutMenu.LoadString(IDS_ABOUTBOX);
-		ASSERT(bNameValid);
-		if (!strAboutMenu.IsEmpty())
+		bNameValid = strAboutMenu.LoadString( IDS_ABOUTBOX );
+		ASSERT( bNameValid );
+		if( !strAboutMenu.IsEmpty() )
 		{
-			pSysMenu->AppendMenu(MF_SEPARATOR);
-			pSysMenu->AppendMenu(MF_STRING, IDM_ABOUTBOX, strAboutMenu);
+			pSysMenu->AppendMenu( MF_SEPARATOR );
+			pSysMenu->AppendMenu( MF_STRING, IDM_ABOUTBOX, strAboutMenu );
 		}
 	}
 
 	// 이 대화 상자의 아이콘을 설정합니다.  응용 프로그램의 주 창이 대화 상자가 아닐 경우에는
 	//  프레임워크가 이 작업을 자동으로 수행합니다.
-	SetIcon(m_hIcon, TRUE);			// 큰 아이콘을 설정합니다.
-	SetIcon(m_hIcon, FALSE);		// 작은 아이콘을 설정합니다.
+	SetIcon( m_hIcon, TRUE );			// 큰 아이콘을 설정합니다.
+	SetIcon( m_hIcon, FALSE );		// 작은 아이콘을 설정합니다.
 
 	// TODO: 여기에 추가 초기화 작업을 추가합니다.
+	srand( time( NULL ) );
 
 	for( int i = 0; i < 200; ++i )
 	{
@@ -126,22 +127,29 @@ BOOL CpointGroupDlg::OnInitDialog()
 	gp.Run();
 	CGrouping2 gp2( m_vp2, RANGE );
 	gp2.Run();
-	
+
+	// pen init
+	m_pen[0].CreatePen( PS_SOLID, 3, RGB( 255, 255, 255 ) );
+	for( int i = 1; i < PENCOUNT; ++i )
+	{
+		m_pen[i].CreatePen( PS_SOLID, 3, RGB( rand() % 255, rand() % 255, rand() % 255 ) );
+	}
+
 	MoveWindow( 0, 0, 1100, 1100 );
 
 	return TRUE;  // 포커스를 컨트롤에 설정하지 않으면 TRUE를 반환합니다.
 }
 
-void CpointGroupDlg::OnSysCommand(UINT nID, LPARAM lParam)
+void CpointGroupDlg::OnSysCommand( UINT nID, LPARAM lParam )
 {
-	if ((nID & 0xFFF0) == IDM_ABOUTBOX)
+	if( (nID & 0xFFF0) == IDM_ABOUTBOX )
 	{
 		CAboutDlg dlgAbout;
 		dlgAbout.DoModal();
 	}
 	else
 	{
-		CDialogEx::OnSysCommand(nID, lParam);
+		CDialogEx::OnSysCommand( nID, lParam );
 	}
 }
 
@@ -151,22 +159,22 @@ void CpointGroupDlg::OnSysCommand(UINT nID, LPARAM lParam)
 
 void CpointGroupDlg::OnPaint()
 {
-	if (IsIconic())
+	if( IsIconic() )
 	{
-		CPaintDC dc(this); // 그리기를 위한 디바이스 컨텍스트입니다.
+		CPaintDC dc( this ); // 그리기를 위한 디바이스 컨텍스트입니다.
 
-		SendMessage(WM_ICONERASEBKGND, reinterpret_cast<WPARAM>(dc.GetSafeHdc()), 0);
+		SendMessage( WM_ICONERASEBKGND, reinterpret_cast<WPARAM>(dc.GetSafeHdc()), 0 );
 
 		// 클라이언트 사각형에서 아이콘을 가운데에 맞춥니다.
-		int cxIcon = GetSystemMetrics(SM_CXICON);
-		int cyIcon = GetSystemMetrics(SM_CYICON);
+		int cxIcon = GetSystemMetrics( SM_CXICON );
+		int cyIcon = GetSystemMetrics( SM_CYICON );
 		CRect rect;
-		GetClientRect(&rect);
+		GetClientRect( &rect );
 		int x = (rect.Width() - cxIcon + 1) / 2;
 		int y = (rect.Height() - cyIcon + 1) / 2;
 
 		// 아이콘을 그립니다.
-		dc.DrawIcon(x, y, m_hIcon);
+		dc.DrawIcon( x, y, m_hIcon );
 	}
 	else
 	{
@@ -174,7 +182,7 @@ void CpointGroupDlg::OnPaint()
 		DrawRange( dc1 );
 		if( m_gpInfo )
 			DrawGroupingInfo( dc1 );
-		
+
 		for( int i = 0; i < m_drawVP->size(); ++i )
 		{
 			DrawPoint( dc1, (*m_drawVP)[i] );
@@ -186,19 +194,23 @@ void CpointGroupDlg::OnPaint()
 
 void CpointGroupDlg::DrawPoint( CPaintDC& dc, const Point* pp )
 {
-	CPen pen[3];
-	pen[0].CreatePen( PS_SOLID, 3, RGB( 255, 0, 0 ) );
-	pen[1].CreatePen( PS_SOLID, 3, RGB( 0, 255, 0 ) );
-	pen[2].CreatePen( PS_SOLID, 3, RGB( 0, 0, 255 ) );
-
-	// line
 	CPen* oldPen = nullptr;
-	if( pp->type.compare("CORE") == 0 )
-		oldPen = dc.SelectObject( &pen[0] );
-	else if( pp->type.compare( "BORDER" ) == 0  )
-		oldPen = dc.SelectObject( &pen[1] );
-	else if( pp->type.compare( "NOISE" ) == 0 )
-		oldPen = dc.SelectObject( &pen[2] );
+
+	//	CPen pen[3];
+	//	pen[0].CreatePen( PS_SOLID, 3, RGB( 255, 0, 0 ) );
+	//	pen[1].CreatePen( PS_SOLID, 3, RGB( 0, 255, 0 ) );
+	//	pen[2].CreatePen( PS_SOLID, 3, RGB( 0, 0, 255 ) );
+	//
+	//
+	//	// line
+	//	if( pp->type.compare("CORE") == 0 )
+	//		oldPen = dc.SelectObject( &pen[0] );
+	//	else if( pp->type.compare( "BORDER" ) == 0  )
+	//		oldPen = dc.SelectObject( &pen[1] );
+	//	else if( pp->type.compare( "NOISE" ) == 0 )
+	//		oldPen = dc.SelectObject( &pen[2] );
+
+	oldPen = dc.SelectObject( &m_pen[pp->sector] );
 
 	dc.MoveTo( pp->x - POINTSIZE, pp->y );
 	dc.LineTo( pp->x + POINTSIZE, pp->y );
@@ -214,8 +226,8 @@ void CpointGroupDlg::DrawPoint( CPaintDC& dc, const Point* pp )
 	if( m_ptInfo )
 		tmp.Format( L"NO:%d", pp->id );
 	else
-		tmp.Format( L"GP:%d", pp->sector );
-	dc.TextOut( pp->x+3, pp->y+3, tmp );
+		tmp.Format( L"G%d", pp->sector );
+	dc.TextOut( pp->x + 3, pp->y + 3, tmp );
 }
 
 void CpointGroupDlg::DrawRange( CPaintDC& dc )
@@ -277,8 +289,8 @@ BOOL CpointGroupDlg::OnMouseWheel( UINT nFlags, short zDelta, CPoint pt )
 	if( zDelta > 0 )
 		m_drawVP = &m_vp;
 	else if( zDelta < 0 )
-		m_drawVP = &m_vp2;
+		//m_drawVP = &m_vp2;
 
-	Invalidate( TRUE );
+		Invalidate( TRUE );
 	return CDialogEx::OnMouseWheel( nFlags, zDelta, pt );
 }

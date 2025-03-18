@@ -3,6 +3,14 @@
 #include <vector>
 using namespace std;
 
+enum PointAttribute
+{
+	NONE = 0,
+	CORE,
+	BORDER,
+	NOISE
+};
+
 class Point
 {
 public:
@@ -11,6 +19,7 @@ public:
 	double y;
 	int sector;
 	string type;
+	int attr;
 	vector<Point*> member;
 
 	Point()
@@ -23,8 +32,8 @@ public:
 		b = rand() % 1000000;
 		y = f + b / 1000000;
 
-		sector = -1;
+		sector = 0;
 		type = "";
-
+		attr = PointAttribute::NONE;
 	}
 };
