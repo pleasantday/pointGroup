@@ -196,20 +196,6 @@ void CpointGroupDlg::DrawPoint( CPaintDC& dc, const Point* pp )
 {
 	CPen* oldPen = nullptr;
 
-	//	CPen pen[3];
-	//	pen[0].CreatePen( PS_SOLID, 3, RGB( 255, 0, 0 ) );
-	//	pen[1].CreatePen( PS_SOLID, 3, RGB( 0, 255, 0 ) );
-	//	pen[2].CreatePen( PS_SOLID, 3, RGB( 0, 0, 255 ) );
-	//
-	//
-	//	// line
-	//	if( pp->type.compare("CORE") == 0 )
-	//		oldPen = dc.SelectObject( &pen[0] );
-	//	else if( pp->type.compare( "BORDER" ) == 0  )
-	//		oldPen = dc.SelectObject( &pen[1] );
-	//	else if( pp->type.compare( "NOISE" ) == 0 )
-	//		oldPen = dc.SelectObject( &pen[2] );
-
 	oldPen = dc.SelectObject( &m_pen[pp->sector] );
 
 	dc.MoveTo( pp->x - POINTSIZE, pp->y );
